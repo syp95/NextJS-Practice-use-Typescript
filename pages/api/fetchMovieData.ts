@@ -21,7 +21,11 @@ export interface IGetMoviesResult {
 }
 
 export const getMovie = async () => {
-    const { data } = await axios.get('/api/movies');
+    const API_KEY = process.env.API_KEY;
+    const BASE_PATH = 'https://api.themoviedb.org/3';
+    const { data } = await axios.get(
+        `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}`,
+    );
 
     return data;
 };

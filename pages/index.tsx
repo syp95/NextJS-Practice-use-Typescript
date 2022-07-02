@@ -1,5 +1,6 @@
+import { GetServerSideProps } from 'next';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 import Seo from '../components/Seo';
 import { getMovie, IGetMoviesResult } from './api/FetchMovieData';
 
@@ -7,6 +8,11 @@ export default function Home() {
     const { data, isLoading } = useQuery<IGetMoviesResult>(
         ['movie', 'nowPlaying'],
         getMovie,
+        {
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            keepPreviousData: true,
+        },
     );
     console.log(data);
 
@@ -15,15 +21,18 @@ export default function Home() {
             <div className='container'>
                 <Seo title='Home' />
 
-                {isLoading && <h1>Loading...'</h1>}
-                {data?.results.map((movie) => (
-                    <div className='movie' key={movie.id}>
-                        <img
-                            src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                        />
-                        <h4>{movie.title}</h4>
-                    </div>
-                ))}
+                {isLoading ? (
+                    <h1>Loading...</h1>
+                ) : (
+                    data?.results.map((movie) => (
+                        <div className='movie' key={movie.id}>
+                            <img
+                                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                            />
+                            <h4>{movie.title}</h4>
+                        </div>
+                    ))
+                )}
             </div>
             <style jsx>{`
                 .container {
@@ -49,3 +58,18 @@ export default function Home() {
         </>
     );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+    const queryClient = new QueryClient();
+
+    await queryClient.prefetchQuery(
+        ['movie', 'nowPlaying'],
+        async () => await getMovie(),
+    );
+
+    return {
+        props: {
+            dehydratedState: dehydrate(queryClient),
+        },
+    };
+};
