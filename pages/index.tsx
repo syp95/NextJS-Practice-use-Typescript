@@ -1,4 +1,6 @@
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { dehydrate, QueryClient, useQuery } from 'react-query';
 import Seo from '../components/Seo';
@@ -15,6 +17,10 @@ export default function Home() {
         },
     );
     console.log(data);
+    const router = useRouter();
+    const onClick = (id: Number) => {
+        router.push(`/movies/${id}`);
+    };
 
     return (
         <>
@@ -27,9 +33,14 @@ export default function Home() {
                     data?.results.map((movie) => (
                         <div className='movie' key={movie.id}>
                             <img
+                                onClick={() => onClick(movie.id)}
                                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                             />
-                            <h4>{movie.title}</h4>
+                            <h4>
+                                <Link href={`/movies/${movie.id}`}>
+                                    <a>{movie.title}</a>
+                                </Link>
+                            </h4>
                         </div>
                     ))
                 )}

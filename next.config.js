@@ -14,14 +14,14 @@ const nextConfig = {
     //         },
     //     ];
     // },
-    // async rewrites() {
-    //     return [
-    //         {
-    //             source: '/api/movies',
-    //             destination: `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}`,
-    //         },
-    //     ];
-    // },
+    async rewrites() {
+        return [
+            {
+                source: '/api/movies',
+                destination: `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}`,
+            },
+        ];
+    },
 };
 
 module.exports = nextConfig;
