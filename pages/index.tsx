@@ -18,8 +18,16 @@ export default function Home() {
     );
     console.log(data);
     const router = useRouter();
-    const onClick = (id: Number) => {
-        router.push(`/movies/${id}`);
+    const onClick = (id: Number, title: String) => {
+        router.push(
+            {
+                pathname: `/movies/${id}`,
+                query: {
+                    title: `${title}`,
+                },
+            },
+            `/movies/${id}`,
+        );
     };
 
     return (
@@ -33,7 +41,7 @@ export default function Home() {
                     data?.results.map((movie) => (
                         <div className='movie' key={movie.id}>
                             <img
-                                onClick={() => onClick(movie.id)}
+                                onClick={() => onClick(movie.id, movie.title)}
                                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                             />
                             <h4>
