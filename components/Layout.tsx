@@ -10,7 +10,6 @@ export default function Layout({ children }: Props) {
         <>
             <NavBar />
             <div>{children}</div>
-            <footer>hi</footer>
         </>
     );
 }

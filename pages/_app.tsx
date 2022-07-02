@@ -19,7 +19,6 @@ declare module 'react-query/types/react/Hydrate' {
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     const [queryClient] = useState(() => new QueryClient());
-    console.log(queryClient);
 
     return (
         <>
